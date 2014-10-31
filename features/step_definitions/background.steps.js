@@ -5,11 +5,11 @@ module.exports = function() {
 
     this.World = require(worldPath).World;
 
-    this.Given(/^I have an active browser$/, function (callback) {
+    this.Given(/^I have an active browser$/, function(callback) {
         this.init(callback);
     });
 
-    this.Given(/^I goto (.*)$/, function (url, callback) {
+    this.Given(/^I goto (.*)$/, function(url, callback) {
         this.goto(url, callback);
     });
 
