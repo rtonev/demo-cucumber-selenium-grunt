@@ -1,0 +1,6 @@
+.DS_Store
+*.swp
+*.log
+*.png
+build
+node_modules

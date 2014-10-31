@@ -1,0 +1,15 @@
+{
+    "name": "Gherkin",
+    "devDependencies": {
+        "cucumber": "latest",
+        "grunt": "latest",
+        "grunt-contrib-watch": "latest",
+        "grunt-run": "latest",
+        "selenium-webdriver": "latest"
+    },
+    "scripts": {
+        "test": "grunt test",
+        "test-watch": "grunt test-watch"
+    },
+    "version": "0.0.1"
+}
