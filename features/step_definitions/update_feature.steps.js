@@ -5,31 +5,36 @@ module.exports = function() {
 
     this.World = require(worldPath).World;
 
-    this.Given(/^I am at Google's landing page$/, function (callback) {
-        this.gotoGoogle(callback);
+    this.Given(/^I can see the (.*) element$/, function (elemName, callback) {
+        this.assertIsElementVisible(elemName, callback);
     });
 
-    this.Given(/^I can see the input field$/, function (callback) {
-        this.assertIsElementVisible('q', callback);
+    this.When(/^I enter (.*) into the (.*) input field$/,
+        function (query, elemName, callback) {
+            this.elementInput(elemName, query, callback);
+        }
+    );
+
+    this.When(/^click on the (.*) button$/, function (elemName, callback) {
+        this.elementClick(elemName, callback);
     });
 
-    this.Given(/^I can see the button$/, function (callback) {
-        this.assertIsElementVisible('btnG', callback);
-    });
+    this.Then(/^the page title should be equal to (.*)$/,
+        function (title, callback) {
+            this.title(function(t) {
+                assert.equal(t, title);
+                callback();
+            });
+        }
+    );
 
-    this.When(/^I enter a query equal to (.*)$/, function (query, callback) {
-        this.elementInput('q', query, callback);
-    });
-
-    this.When(/^click on the button$/, function (callback) {
-        this.elementClick('btnG', callback);
-    });
-
-    this.Then(/^the title should contain (.*)$/, function (query, callback) {
-        this.title(function(title) {
-            assert.equal(query + ' - Google Search', title);
-            callback();
-        });
-    });
+    this.Then(/^the page title should not be equal to (.*)$/,
+        function (title, callback) {
+            this.title(function(t) {
+                assert.notEqual(t, title);
+                callback();
+            });
+        }
+    );
 
 };

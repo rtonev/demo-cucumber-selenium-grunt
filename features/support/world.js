@@ -3,11 +3,18 @@ var assert = require('assert'),
     path = require('path'),
     webdriver = require('selenium-webdriver');
 
-var ROOT_URL = 'http://google.com/en';
-
 exports.World = function World(callback) {
 
     this.driver = null;
+
+    this._takeScreenshot = function(callback) {
+        this.driver.takeScreenshot().then(function(data) {
+            var filename = new Date().toString() + '.png';
+            var file = path.join(process.cwd(), filename);
+            fs.writeFileSync(file, data, 'base64');
+            if (callback)  callback();
+        });
+    };
 
     this.assertIsElementVisible = function(name, callback) {
         this.isElementVisible(name, function(visible) {
@@ -32,14 +39,17 @@ exports.World = function World(callback) {
         });
     };
 
-    this.gotoGoogle = function(callback) {
-        this.driver =
-            new webdriver.Builder()
-                .withCapabilities(webdriver.Capabilities.phantomjs())
-                .build();
-        this.driver.get(ROOT_URL).then(function() {
+    this.goto = function(url, callback) {
+        this.driver.get(url).then(function() {
             callback();
         });
+    };
+
+    this.init = function(callback) {
+        this.driver = new webdriver.Builder()
+            .withCapabilities(webdriver.Capabilities.phantomjs())
+            .build();
+        callback();
     };
 
     this.isElementVisible = function(name, callback) {
@@ -47,15 +57,6 @@ exports.World = function World(callback) {
             callback(true);
         }, function(err) {
             callback(false);
-        });
-    };
-
-    this.takeScreenshot = function(callback) {
-        this.driver.takeScreenshot().then(function(data) {
-            var filename = new Date().toString() + '.png';
-            var file = path.join(process.cwd(), filename);
-            fs.writeFileSync(file, data, 'base64');
-            if (callback)  callback();
         });
     };
 
